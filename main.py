@@ -1,13 +1,10 @@
 import sys
 import cv2 as cv
 
-
-# webhook test
-
 def main() -> None:
     print("Hello world")
 
-    img = cv.imread('Finger/testFinger.jpg')
+    img = cv.imread('fingers_data_base/101_1 (2).tif')
     cv.imshow('Default', img)
 
     # OpenCV functions that may be useful in the future

@@ -4,8 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+numpy = "==1.22.3"
+pyinstaller = "==4.10"
 
 [dev-packages]
+pyinstaller = "*"
 
 [requires]
 python_version = "3.8"
