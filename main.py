@@ -35,7 +35,7 @@ def main() -> None:
             sys.exit(1)
 
         f = open("database.txt", 'a')
-        f.write(name + "," + gender + "," + fingerPrintFile + "," + voiceFile + "\n")
+        f.write("\n" + name + "," + gender + "," + fingerPrintFile + "," + voiceFile + "\n")
         f.close()
 
         print("User added successfully!")

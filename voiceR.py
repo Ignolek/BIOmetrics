@@ -12,11 +12,11 @@ def voice(file: str):
 
     times = librosa.times_like(f0)
 
-    fig, ax = plt.subplots()
-    ax.set(title='YIN fundamental frequency estimation')
-    ax.plot(times, f0, label='f0', color='blue', linewidth=1)
-    ax.legend(loc='upper right')
-    plt.show()
+    # fig, ax = plt.subplots()
+    # ax.set(title='YIN fundamental frequency estimation')
+    # ax.plot(times, f0, label='f0', color='blue', linewidth=1)
+    # ax.legend(loc='upper right')
+    # plt.show()
 
     print(round(statistics.median(f0), 1), "Hz")
     if statistics.median(f0)> 165: 
