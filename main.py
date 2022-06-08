@@ -1,36 +1,95 @@
 import sys
 import cv2 as cv
+from fingerprint import *
+from voiceR import *
+
 
 def main() -> None:
-    print("Hello world")
+    print("Welcome to system!")
+    newUserFlag = input("Are you a new user?\n0 - yes\n1 - no\nAnswer:\t")
 
-    img = cv.imread('102_3 (3)_painted.tif')
-    cv.imshow('Default', img)
+    if (newUserFlag == '0'):
+        name = input("Please provide your name:\t")
+        gender = input("Please provide your gender (m / f):\t")
+        fingerPrintFile = input("Please provide your fingerprint file:\t")
+        voiceFile = input("Please provide your voice file sample:\t")
 
-    # OpenCV functions that may be useful in the future
-    
-    # Converting to grayscale
-    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    cv.imshow('Gray', gray)
+        f = open("database.txt", 'r')
 
-    # Blur
-    blur = cv.GaussianBlur(img, (7, 7), cv.BORDER_DEFAULT)
-    cv.imshow('Blur', blur)
+        # Check for user in database
+        lines = f.readlines()
+        flagFPinDB = False
+        flagVinDB = False
+        for line in lines:
+            if (line.split(',')[2] == fingerPrintFile):
+                flagFPinDB = True
+            if (line.split(',')[3] == voiceFile):
+                flagVinDB = True
+        f.close()
 
-    # Edge Cascade
-    edges = cv.Canny(img, 50, 50)
-    cv.imshow('Canny Edges', edges)
+        if (flagFPinDB or flagVinDB):
+            if (flagFPinDB):
+                print("Fingerprint already in database!")
+            if (flagVinDB):
+                print("Voice sample already in database!")
+            sys.exit(1)
 
-    # Dilatation
-    dilated = cv.dilate(edges, (7, 7), iterations = 3)
-    cv.imshow('Dilated', dilated)
+        f = open("database.txt", 'w')
+        f.write(name + "," + gender + "," + fingerPrintFile + "," + voiceFile)
+        f.close()
 
-    # Erodation
-    eroded = cv.erode(dilated, (3, 3), iterations = 1)
-    cv.imshow('Eroded', eroded)
+        print("User added successfully!")
+        sys.exit(0)
 
-    cv.waitKey(0)
+    # Check for existing user
+    name = input("Please provide your name:\t")
 
+    # Check for user in database
+    f = open("database.txt", 'r')
+    lines = f.readlines()
+    flagUser = False
+    for line in lines:
+        if (line.split(',')[0] == name):
+            flagUser = True
+    f.close()
+    if (not flagUser):
+        print("Name is not in the database!")
+        sys.exit(1)
+
+    fingerPrintFile = input("Please provide your fingerprint file:\t")
+    fpUnlocked, fpFilename = fingerprint(fingerPrintFile)
+
+    if (not fpUnlocked):
+        print("User is not validated, fingerprint didn't matched database!")
+        sys.exit(1)
+
+    # Check for user in database
+    f = open("database.txt", 'r')
+    flagFP = False
+    for line in f.readlines():
+        if (line.split(',')[2] == fpFilename):
+            flagFP = True
+    f.close()
+    if (not flagFP):
+        print("Fingerprint is wrong!")
+        sys.exit(1)
+    else:
+        print("User is validated, fingerprint matched the one in our database!")
+
+    voiceFile = input("Please provide your voice file:\t")
+    gender = voice(voiceFile)
+    f = open("database.txt", 'r')
+    flagV = False
+    for line in f.readlines():
+        if (line.split(',')[1] == gender):
+            flagV = True
+    f.close()
+
+    if (not flagV):
+        print("User is not validated, gender of the voice didn't matched the declared one!")
+        sys.exit(1)
+
+    print("You may enter!")
     sys.exit(0)
 
 
