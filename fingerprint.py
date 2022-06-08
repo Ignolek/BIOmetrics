@@ -30,7 +30,7 @@ def fingerprint(sampleStr: str):
         if cv2.countNonZero(sample)==0:
             break
 
-    cv2.imshow("Skeleton", skel)
+    # cv2.imshow("Skeleton", skel)
     cv2.waitKey(0)
 
     #variable to check the best possible match 
@@ -42,11 +42,11 @@ def fingerprint(sampleStr: str):
     keyPointsSample, keyPointsOriginal, matchPoint = None, None, None
 
     counter = 0
-    sizeOfDataSet = 1
+    sizeOfDataSet = 320
     #iterate through entire dataset (320 for testing reasons)
     for file in [file for file in os.listdir("fingers_data_base")][:sizeOfDataSet]:
-        # if (counter/sizeOfDataSet * 100) % 10 == 0:
-            # print(counter/sizeOfDataSet * 100)
+        if (counter/sizeOfDataSet * 100) % 10 == 0:
+            print(str(int(counter/sizeOfDataSet * 100)) + '%' + " checked")
         counter += 1
         
         fingerTest = cv2.imread("fingers_data_base/" + file, 0)
@@ -70,7 +70,8 @@ def fingerprint(sampleStr: str):
             if cv2.countNonZero(fingerTest)==0:
                 break
         
-        cv2.imshow("Skeleton", skelFingImg)
+        # cv2.imshow("Skeleton", skelFingImg)
+        # cv2.imshow("Sample", skel)
         cv2.waitKey(0)
         #scale invariant transform that allows us to extract key points and descriptors
         #for individual images
@@ -115,7 +116,7 @@ def fingerprint(sampleStr: str):
     if bestScore != 0:
         result = cv2.drawMatches(skel, keyPointsSample, image, keyPointsOriginal, matchPoint[0::20], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
         result = cv2.resize(result, None, fx=1.0, fy=1.0)
-        cv2.imshow("Result", result)
+        # cv2.imshow("Result", result)
         cv2.waitKey()
         cv2.destroyAllWindows()
     else:

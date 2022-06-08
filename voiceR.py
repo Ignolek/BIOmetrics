@@ -18,9 +18,9 @@ def voice(file: str):
     ax.legend(loc='upper right')
     plt.show()
 
-    print(statistics.median(f0), "Hz")
+    print(round(statistics.median(f0), 1), "Hz")
     if statistics.median(f0)> 165: 
-        return 'm'
+        return 'f'
     else: 
         return 'm'
 

@@ -34,8 +34,8 @@ def main() -> None:
                 print("Voice sample already in database!")
             sys.exit(1)
 
-        f = open("database.txt", 'w')
-        f.write(name + "," + gender + "," + fingerPrintFile + "," + voiceFile)
+        f = open("database.txt", 'a')
+        f.write(name + "," + gender + "," + fingerPrintFile + "," + voiceFile + "\n")
         f.close()
 
         print("User added successfully!")
